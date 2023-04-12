@@ -8,6 +8,7 @@
 import UIKit
 import CoreLocation
 import SkeletonView
+import Loaf
 
 private enum Constants {
     static let showAddCityIdentifier = "ShowAddCity"
@@ -21,7 +22,10 @@ final class WeatherViewController: UIViewController {
     @IBOutlet private var conditionLabel: UILabel!
     
     // MARK: - Properties
+    private let defaultCity = "Warsaw"
     private let weatherService = WeatherService()
+    private let cacheManager = CacheManager()
+    
     private lazy var locationManager: CLLocationManager = {
         let manager = CLLocationManager()
         manager.delegate = self
@@ -31,9 +35,10 @@ final class WeatherViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+                
+        let city = cacheManager.getCachedCity() ?? defaultCity
         
-        showAnimation()
-        fetchWeather()
+        fetchWeather(byCity: city)
     }
     
     // MARK: - Actions
@@ -53,7 +58,6 @@ final class WeatherViewController: UIViewController {
         switch locationManager.authorizationStatus {
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
-            locationManager.requestLocation()
         case .authorizedAlways, .authorizedWhenInUse:
             locationManager.requestLocation()
         default:
@@ -64,6 +68,34 @@ final class WeatherViewController: UIViewController {
 
 // MARK: - Private Helpers
 private extension WeatherViewController {
+    func fetchWeather(byLocation location: CLLocation) {
+        showAnimation()
+        
+        let lat = location.coordinate.latitude
+        let lon = location.coordinate.longitude
+        
+        weatherService.fetchWeather(lat: lat, lon: lon) { [weak self] result in
+            self?.handleWeatherResult(result)
+        }
+    }
+    
+    func fetchWeather(byCity city: String) {
+        showAnimation()
+        
+        weatherService.fetchWeather(byCity: city) { [weak self] result in
+            self?.handleWeatherResult(result)
+        }
+    }
+    
+    func handleWeatherResult(_ result: Result<WeatherModel, Error>) {
+        switch result {
+        case .success(let model):
+            self.updateUI(with: model)
+        case .failure(let error):
+            handleError(error)
+        }
+    }
+    
     func showAnimation() {
         conditionImageView.showAnimatedGradientSkeleton()
         temperatureLabel.showAnimatedGradientSkeleton()
@@ -76,23 +108,14 @@ private extension WeatherViewController {
         conditionLabel.hideSkeleton()
     }
     
-    func fetchWeather() {
-        weatherService.fetchWeather(byCity: "Gizycko") { [weak self] result in
-            switch result {
-            case .success(let model):
-                self?.updateUI(with: model)
-            case .failure(let error):
-                print("DEBUG: Error - \(error.localizedDescription)")
-            }
-        }
-    }
-    
     func updateUI(with model: WeatherModel) {
         hideAnimation()
         
+        navigationItem.title = model.name
+        
+        conditionImageView.image = model.conditionImage
         temperatureLabel.text = model.temperature.toTempString
         conditionLabel.text = model.conditionDescription.capitalized
-        navigationItem.title = model.name
     }
     
     func locationPermissionAlert() {
@@ -120,6 +143,18 @@ private extension WeatherViewController {
         
         self.present(alertController, animated: true)
     }
+    
+    func handleError(_ error: Error) {
+        hideAnimation()
+        
+        navigationItem.title = ""
+        conditionImageView.image = UIImage(systemName: "exclamationmark.bubble.circle")
+        conditionImageView.tintColor = .systemRed
+        temperatureLabel.text = "Oops!"
+        conditionLabel.text = "Something went wrong.\nPlease try again"
+        
+        Loaf(error.localizedDescription, state: .error, location: .bottom, sender: self).show()
+    }
 }
 
 // MARK: - WeatherViewControllerDelegate
@@ -134,24 +169,19 @@ extension WeatherViewController: WeatherViewControllerDelegate {
 // MARK: - CLLocationManagerDelegate
 extension WeatherViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last {
-            manager.stopUpdatingLocation()
-            
-            let lat = location.coordinate.latitude
-            let lon = location.coordinate.longitude
-            
-            weatherService.fetchWeather(lat: lat, lon: lon) { result in
-                switch result {
-                case .success(let model):
-                    DispatchQueue.main.async {
-                        self.updateUI(with: model)
-                    }
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
-        }
+        guard let location = locations.last else { return }
+        
+        manager.stopUpdatingLocation()
+        
+        fetchWeather(byLocation: location)
     }
     
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) { }
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        handleError(error)
+    }
+    
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        guard manager.authorizationStatus != .notDetermined else { return }
+        manager.requestLocation()
+    }
 }

@@ -19,6 +19,8 @@
 		5279A13C29D6417E002D30D9 /* WeatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5279A13B29D6417E002D30D9 /* WeatherService.swift */; };
 		5279A13F29D64961002D30D9 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5279A13E29D64961002D30D9 /* Double+Extension.swift */; };
 		5279A14229D64F9C002D30D9 /* AddCityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5279A14129D64F9C002D30D9 /* AddCityViewController.swift */; };
+		528A899629E6C8D700CDF295 /* Loaf in Frameworks */ = {isa = PBXBuildFile; productRef = 528A899529E6C8D700CDF295 /* Loaf */; };
+		528D932929E6D7A500D103FA /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528D932829E6D7A500D103FA /* CacheManager.swift */; };
 		52E64D6A29E255320035E525 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E64D6929E255320035E525 /* Int+Extension.swift */; };
 		52E64D6C29E256C60035E525 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E64D6B29E256C60035E525 /* UIImage+Extension.swift */; };
 		52E64D6E29E4C5580035E525 /* WeatherDataFailure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E64D6D29E4C5580035E525 /* WeatherDataFailure.swift */; };
@@ -37,6 +39,7 @@
 		5279A13B29D6417E002D30D9 /* WeatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherService.swift; sourceTree = "<group>"; };
 		5279A13E29D64961002D30D9 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		5279A14129D64F9C002D30D9 /* AddCityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCityViewController.swift; sourceTree = "<group>"; };
+		528D932829E6D7A500D103FA /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		52E64D6929E255320035E525 /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		52E64D6B29E256C60035E525 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		52E64D6D29E4C5580035E525 /* WeatherDataFailure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataFailure.swift; sourceTree = "<group>"; };
@@ -49,6 +52,7 @@
 			files = (
 				5279A13629D6397B002D30D9 /* SkeletonView in Frameworks */,
 				5279A13329D63954002D30D9 /* Alamofire in Frameworks */,
+				528A899629E6C8D700CDF295 /* Loaf in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,11 +80,10 @@
 			children = (
 				5279A14029D64F8A002D30D9 /* Controllers */,
 				5279A13D29D6494F002D30D9 /* Extensions */,
-				5279A13829D6405C002D30D9 /* Services */,
+				5279A13829D6405C002D30D9 /* Managers */,
 				5279A13729D64055002D30D9 /* Models */,
 				5279A11D29D63280002D30D9 /* AppDelegate.swift */,
 				5279A11F29D63280002D30D9 /* SceneDelegate.swift */,
-				5279A12129D63280002D30D9 /* WeatherViewController.swift */,
 				5279A12329D63280002D30D9 /* Main.storyboard */,
 				5279A12829D63280002D30D9 /* LaunchScreen.storyboard */,
 				5279A12629D63280002D30D9 /* Assets.xcassets */,
@@ -98,12 +101,13 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		5279A13829D6405C002D30D9 /* Services */ = {
+		5279A13829D6405C002D30D9 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
 				5279A13B29D6417E002D30D9 /* WeatherService.swift */,
+				528D932829E6D7A500D103FA /* CacheManager.swift */,
 			);
-			path = Services;
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		5279A13D29D6494F002D30D9 /* Extensions */ = {
@@ -119,6 +123,7 @@
 		5279A14029D64F8A002D30D9 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				5279A12129D63280002D30D9 /* WeatherViewController.swift */,
 				5279A14129D64F9C002D30D9 /* AddCityViewController.swift */,
 			);
 			path = Controllers;
@@ -143,6 +148,7 @@
 			packageProductDependencies = (
 				5279A13229D63954002D30D9 /* Alamofire */,
 				5279A13529D6397B002D30D9 /* SkeletonView */,
+				528A899529E6C8D700CDF295 /* Loaf */,
 			);
 			productName = WeatherUIKit;
 			productReference = 5279A11A29D63280002D30D9 /* WeatherUIKit.app */;
@@ -175,6 +181,7 @@
 			packageReferences = (
 				5279A13129D63954002D30D9 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				5279A13429D6397B002D30D9 /* XCRemoteSwiftPackageReference "SkeletonView" */,
+				528A899429E6C8D700CDF295 /* XCRemoteSwiftPackageReference "Loaf" */,
 			);
 			productRefGroup = 5279A11B29D63280002D30D9 /* Products */;
 			projectDirPath = "";
@@ -209,6 +216,7 @@
 				5279A14229D64F9C002D30D9 /* AddCityViewController.swift in Sources */,
 				52E64D6C29E256C60035E525 /* UIImage+Extension.swift in Sources */,
 				5279A12229D63280002D30D9 /* WeatherViewController.swift in Sources */,
+				528D932929E6D7A500D103FA /* CacheManager.swift in Sources */,
 				5279A13F29D64961002D30D9 /* Double+Extension.swift in Sources */,
 				5279A11E29D63280002D30D9 /* AppDelegate.swift in Sources */,
 				5279A13A29D640B8002D30D9 /* WeatherData.swift in Sources */,
@@ -362,6 +370,7 @@
 				DEVELOPMENT_TEAM = QZ46JW4C9U;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeatherUIKit/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Weather UIKit";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -390,6 +399,7 @@
 				DEVELOPMENT_TEAM = QZ46JW4C9U;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeatherUIKit/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Weather UIKit";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -448,6 +458,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		528A899429E6C8D700CDF295 /* XCRemoteSwiftPackageReference "Loaf" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/schmidyy/Loaf";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -460,6 +478,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5279A13429D6397B002D30D9 /* XCRemoteSwiftPackageReference "SkeletonView" */;
 			productName = SkeletonView;
+		};
+		528A899529E6C8D700CDF295 /* Loaf */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 528A899429E6C8D700CDF295 /* XCRemoteSwiftPackageReference "Loaf" */;
+			productName = Loaf;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

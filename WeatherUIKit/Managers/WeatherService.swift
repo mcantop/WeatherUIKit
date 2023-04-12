@@ -27,6 +27,7 @@ enum WeatherError: Error, LocalizedError {
 
 struct WeatherService {
     private let apiKey = "9506d8971cedbd747700c868d5a4c549"
+    private let cacheManager = CacheManager()
     
     func fetchWeather(byCity city: String, completion: @escaping (Result<WeatherModel, Error>) -> Void) {
         let query = city.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? city /// Handles if user types something with space
@@ -59,6 +60,7 @@ struct WeatherService {
             .responseDecodable(of: WeatherData.self, queue: .main, decoder: JSONDecoder()) { response in
                 switch response.result {
                 case .success(let weatherData):
+                    cacheManager.cacheCity(weatherData.model.name)
                     completion(.success(weatherData.model))
                 case .failure(let error):
                     if let customError = getWeatherError(error: error, data: response.data) {
